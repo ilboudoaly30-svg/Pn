@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Falcon VPN — Connexion illimitée & boutiques en ligne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1216;
+    --bg-elevated:#151A20;
+    --surface:#1C222A;
+    --surface-2:#232A33;
+    --line:#2B333D;
+    --text:#EEF0F2;
+    --text-dim:#9AA5B1;
+    --text-faint:#6B7684;
+    --accent:#E7A339;
+    --accent-soft:#3A2E17;
+    --teal:#49C6BE;
+    --whatsapp:#3EA76F;
+    --whatsapp-hover:#37945F;
+    --radius-card: 4px;
+    --maxw: 1180px;
+    box-sizing:border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *,*::before,*::after{ box-sizing:inherit; }
+  html{ scroll-behavior:smooth; scroll-padding-top: calc(78px + env(safe-area-inset-top,0px)); background:var(--bg); }
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100%;
+  }
+  h1,h2,h3,h4{ font-family:'Space Grotesk', 'Inter', sans-serif; margin:0; letter-spacing:-0.01em; }
+  p{ margin:0; }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+  ::selection{ background:var(--accent); color:#171308; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  button{ font-family:inherit; cursor:pointer; }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; } }
+
+  /* ===== Layout shells ===== */
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+  .hide{ display:none !important; }
+
+  /* ===== Header ===== */
+  header{
+    position:sticky; top:0; z-index:60;
+    background:rgba(15,18,22,0.86);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding-top: env(safe-area-inset-top,0px);
+  }
+  .headrow{
+    display:flex; align-items:center; gap:20px;
+    height:72px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; flex-shrink:0; text-decoration:none; cursor:pointer; background:none; border:none; padding:0; }
+  .brand svg{ width:34px; height:34px; }
+  .brand-name{ font-size:1.28rem; font-weight:700; color:var(--text); line-height:1; }
+  .brand-name span{ color:var(--accent); }
+
+  .search-shell{ flex:1; max-width:460px; position:relative; }
+  .search-shell input{
+    width:100%; background:var(--surface); border:1px solid var(--line); color:var(--text);
+    padding:11px 16px 11px 40px; border-radius:999px; font-size:0.92rem;
+  }
+  .search-shell input::placeholder{ color:var(--text-faint); }
+  .search-shell input:focus{ border-color:var(--accent); }
+  .search-shell svg{ position:absolute; left:14px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--text-faint); pointer-events:none; }
+  .search-results{
+    position:absolute; top:calc(100% + 8px); left:0; right:0;
+    background:var(--surface-2); border:1px solid var(--line); border-radius:10px;
+    overflow:hidden; box-shadow:0 12px 30px rgba(0,0,0,0.4); z-index:50;
+  }
+  .search-results button{
+    display:flex; width:100%; align-items:center; gap:10px; background:none; border:none; color:var(--text);
+    padding:11px 14px; text-align:left; font-size:0.88rem; border-bottom:1px solid var(--line);
+  }
+  .search-results button:last-child{ border-bottom:none; }
+  .search-results button:hover{ background:var(--surface); }
+  .search-results .sr-price{ margin-left:auto; color:var(--accent); font-weight:600; font-size:0.82rem; white-space:nowrap; }
+  .search-empty{ padding:14px; color:var(--text-faint); font-size:0.85rem; }
+
+  .head-actions{ display:flex; align-items:center; gap:14px; margin-left:auto; }
+  .cart-btn{
+    position:relative; display:flex; align-items:center; gap:8px; background:var(--surface);
+    border:1px solid var(--line); color:var(--text); padding:9px 14px; border-radius:999px; font-size:0.88rem; font-weight:600;
+  }
+  .cart-btn:hover{ border-color:var(--accent); }
+  .cart-btn svg{ width:18px; height:18px; }
+  .cart-count{
+    position:absolute; top:-6px; right:-6px; background:var(--accent); color:#171308;
+    font-size:0.68rem; font-weight:700; min-width:18px; height:18px; border-radius:999px;
+    display:flex; align-items:center; justify-content:center; padding:0 4px;
+  }
+
+  /* ===== Hero ===== */
+  .hero{ padding:64px 0 56px; border-bottom:1px solid var(--line); }
+  .hero-grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:center; }
+  .eyebrow-mark{ display:flex; align-items:center; gap:8px; color:var(--accent); font-size:0.82rem; font-weight:600; margin-bottom:18px; }
+  .eyebrow-mark svg{ width:16px; height:16px; }
+  .hero h1{ font-size:clamp(2.1rem, 4.4vw, 3.4rem); line-height:1.06; font-weight:700; max-width:14ch; }
+  .hero p.lead{ margin-top:20px; color:var(--text-dim); font-size:1.05rem; line-height:1.65; max-width:46ch; }
+  .hero-cta-row{ display:flex; gap:14px; margin-top:30px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 24px; border-radius:6px; font-weight:600; font-size:0.92rem; border:1px solid transparent;
+    text-decoration:none; transition:transform .12s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn:active{ transform:scale(0.98); }
+  .btn-primary{ background:var(--accent); color:#171308; }
+  .btn-primary:hover{ background:#f0b654; }
+  .btn-ghost{ background:transparent; border-color:var(--line); color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--text-dim); }
+
+  .hero-stats{ display:flex; gap:32px; margin-top:40px; }
+  .hero-stat b{ display:block; font-family:'Space Grotesk',sans-serif; font-size:1.5rem; color:var(--accent); }
+  .hero-stat span{ display:block; font-size:0.78rem; color:var(--text-faint); margin-top:2px; }
+
+  .hero-art{ position:relative; display:flex; align-items:center; justify-content:center; }
+  .hero-art svg{ width:100%; max-width:380px; }
+
+  /* ===== Section shared ===== */
+  .section{ padding:64px 0; border-bottom:1px solid var(--line); }
+  .section-head{ margin-bottom:36px; max-width:560px; }
+  .section-head h2{ font-size:clamp(1.5rem,3vw,2rem); font-weight:700; }
+  .section-head p{ color:var(--text-dim); margin-top:10px; font-size:0.98rem; line-height:1.6; }
+
+  /* ===== Product cards (home) ===== */
+  .products-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .product-card{
+    background:var(--bg-elevated); border:1px solid var(--line); border-radius:10px;
+    padding:30px; display:flex; flex-direction:column; gap:16px; cursor:pointer;
+  }
+  .product-card:hover{ border-color:var(--accent); }
+  .pc-icon{
+    width:52px; height:52px; border-radius:10px; background:var(--accent-soft);
+    display:flex; align-items:center; justify-content:center; color:var(--accent);
+  }
+  .pc-icon svg{ width:26px; height:26px; }
+  .product-card h3{ font-size:1.28rem; font-weight:700; }
+  .product-card .pc-desc{ color:var(--text-dim); font-size:0.92rem; line-height:1.6; }
+  .pc-features{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .pc-features li{ display:flex; gap:8px; align-items:flex-start; font-size:0.86rem; color:var(--text-dim); }
+  .pc-features li svg{ width:15px; height:15px; color:var(--teal); flex-shrink:0; margin-top:2px; }
+  .pc-bottom{ margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:12px; padding-top:14px; border-top:1px solid var(--line); }
+  .pc-price{ font-family:'Space Grotesk',sans-serif; font-size:1.35rem; font-weight:700; color:var(--accent); }
+  .pc-price small{ display:block; font-family:'Inter',sans-serif; font-weight:500; font-size:0.68rem; color:var(--text-faint); }
+  .pc-actions{ display:flex; gap:8px; }
+  .btn-sm{ padding:9px 14px; font-size:0.82rem; border-radius:6px; }
+  .btn-add{ background:var(--surface-2); border:1px solid var(--line); color:var(--text); }
+  .btn-add:hover{ border-color:var(--accent); }
+  .btn-pay{ background:var(--whatsapp); color:#08160E; display:flex; align-items:center; gap:6px; }
+  .btn-pay:hover{ background:var(--whatsapp-hover); }
+  .btn-pay svg{ width:15px; height:15px; }
+
+  @media (max-width: 760px){
+    .products-grid{ grid-template-columns:1fr; }
+    .hero-grid{ grid-template-columns:1fr; }
+    .hero-art{ order:-1; }
+    .search-shell{ display:none; }
+  }
+
+  /* ===== Trust strip ===== */
+  .trust{ display:flex; flex-wrap:wrap; gap:28px; padding:36px 0; justify-content:space-between; }
+  .trust-item{ display:flex; align-items:center; gap:10px; color:var(--text-dim); font-size:0.86rem; flex:1; min-width:200px; }
+  .trust-item svg{ width:20px; height:20px; color:var(--accent); flex-shrink:0; }
+
+  /* ===== Footer ===== */
+  footer{ padding:40px 0 calc(40px + env(safe-area-inset-bottom,0px)); }
+  .foot-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .foot-brand{ display:flex; align-items:center; gap:10px; color:var(--text-dim); font-size:0.86rem; }
+  .foot-brand svg{ width:22px; height:22px; }
+  .foot-links{ display:flex; gap:20px; font-size:0.85rem; color:var(--text-dim); }
+  .foot-links a{ text-decoration:none; }
+  .foot-links a:hover{ color:var(--accent); }
+
+  /* ===== Product detail view ===== */
+  .pdview{ padding:40px 0 80px; }
+  .breadcrumb{ display:flex; align-items:center; gap:8px; font-size:0.84rem; color:var(--text-faint); margin-bottom:28px; }
+  .breadcrumb button{ background:none; border:none; color:var(--text-dim); font-size:0.84rem; padding:0; }
+  .breadcrumb button:hover{ color:var(--accent); }
+
+  .pd-grid{ display:grid; grid-template-columns:0.85fr 1.15fr; gap:48px; }
+  .pd-visual{
+    background:var(--bg-elevated); border:1px solid var(--line); border-radius:12px;
+    height:340px; display:flex; align-items:center; justify-content:center; position:sticky; top:96px;
+  }
+  .pd-visual svg{ width:170px; height:170px; color:var(--accent); }
+
+  .pd-kicker{ color:var(--accent); font-weight:600; font-size:0.8rem; margin-bottom:10px; }
+  .pd-title{ font-size:clamp(1.7rem,3.4vw,2.3rem); font-weight:700; line-height:1.1; }
+  .pd-rating{ display:flex; align-items:center; gap:8px; margin-top:14px; font-size:0.88rem; color:var(--text-dim); }
+  .stars{ display:inline-flex; gap:2px; color:var(--accent); }
+  .stars svg{ width:15px; height:15px; }
+  .pd-price-row{ display:flex; align-items:baseline; gap:10px; margin-top:20px; }
+  .pd-price{ font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; color:var(--accent); }
+  .pd-price-note{ color:var(--text-faint); font-size:0.84rem; }
+  .pd-desc{ color:var(--text-dim); margin-top:18px; line-height:1.7; font-size:0.98rem; max-width:60ch; }
+
+  .pd-cta-row{ display:flex; gap:12px; margin-top:26px; flex-wrap:wrap; }
+  .pd-cta-row .btn{ padding:14px 26px; }
+
+  .pd-block{ margin-top:36px; padding-top:28px; border-top:1px solid var(--line); }
+  .pd-block h4{ font-size:1.02rem; font-weight:700; margin-bottom:14px; }
+  .pd-list{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:12px 20px; }
+  .pd-list li{ display:flex; gap:10px; align-items:flex-start; font-size:0.9rem; color:var(--text-dim); }
+  .pd-list li svg{ width:16px; height:16px; color:var(--teal); flex-shrink:0; margin-top:2px; }
+
+  .pd-steps{ display:flex; flex-direction:column; gap:14px; }
+  .pd-step{ display:flex; gap:14px; }
+  .pd-step-num{
+    width:28px; height:28px; border-radius:50%; background:var(--surface-2); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; color:var(--accent); flex-shrink:0;
+  }
+  .pd-step p{ color:var(--text-dim); font-size:0.9rem; line-height:1.55; padding-top:3px; }
+  .pd-step b{ color:var(--text); }
+
+  .pd-faq details{ border-bottom:1px solid var(--line); padding:14px 0; }
+  .pd-faq summary{ cursor:pointer; font-weight:600; font-size:0.92rem; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+  .pd-faq summary::-webkit-details-marker{ display:none; }
+  .pd-faq summary .qicon{ font-size:1.1rem; color:var(--text-faint); transition:transform .15s ease; }
+  .pd-faq details[open] summary .qicon{ transform:rotate(45deg); }
+  .pd-faq p{ color:var(--text-dim); font-size:0.88rem; margin-top:10px; line-height:1.6; }
+
+  @media (max-width: 800px){
+    .pd-grid{ grid-template-columns:1fr; }
+    .pd-visual{ position:static; height:220px; }
+    .pd-list{ grid-template-columns:1fr; }
+  }
+
+  /* ===== Reviews ===== */
+  .reviews-head{ display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px; }
+  .reviews-summary{ display:flex; align-items:center; gap:14px; }
+  .reviews-summary .big-score{ font-family:'Space Grotesk',sans-serif; font-size:2.2rem; font-weight:700; }
+  .reviews-summary .rs-meta{ font-size:0.82rem; color:var(--text-faint); }
+  .review-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .review-card{ background:var(--bg-elevated); border:1px solid var(--line); border-radius:10px; padding:20px; }
+  .review-top{ display:flex; align-items:center; gap:12px; }
+  .avatar{
+    width:42px; height:42px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; color:#171308;
+  }
+  .review-name{ font-weight:600; font-size:0.92rem; }
+  .review-loc{ font-size:0.76rem; color:var(--text-faint); }
+  .review-stars{ margin-top:12px; }
+  .review-text{ margin-top:10px; color:var(--text-dim); font-size:0.88rem; line-height:1.6; }
+  .review-date{ margin-top:12px; font-size:0.74rem; color:var(--text-faint); }
+  @media (max-width:700px){ .review-grid{ grid-template-columns:1fr; } }
+
+  /* ===== Floating cart panel ===== */
+  .cart-overlay{
+    position:fixed; inset:0; background:rgba(6,8,10,0.6); z-index:90; opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .cart-overlay.open{ opacity:1; pointer-events:auto; }
+  .cart-panel{
+    position:fixed; top:0; right:0; height:100%; width:min(400px, 92vw); background:var(--bg-elevated);
+    border-left:1px solid var(--line); z-index:91; transform:translateX(100%); transition:transform .25s ease;
+    display:flex; flex-direction:column;
+    padding-top: env(safe-area-inset-top,0px); padding-bottom: env(safe-area-inset-bottom,0px);
+  }
+  .cart-panel.open{ transform:translateX(0); }
+  .cart-head{ display:flex; align-items:center; justify-content:space-between; padding:20px 22px; border-bottom:1px solid var(--line); }
+  .cart-head h3{ font-size:1.1rem; }
+  .cart-close{ background:none; border:none; color:var(--text-dim); font-size:1.3rem; line-height:1; padding:4px; }
+  .cart-close:hover{ color:var(--text); }
+  .cart-items{ flex:1; overflow-y:auto; padding:14px 22px; display:flex; flex-direction:column; gap:14px; }
+  .cart-empty{ color:var(--text-faint); font-size:0.9rem; text-align:center; margin-top:40px; }
+  .cart-item{ display:flex; gap:12px; align-items:flex-start; border-bottom:1px solid var(--line); padding-bottom:14px; }
+  .ci-icon{ width:40px; height:40px; border-radius:8px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; color:var(--accent); flex-shrink:0; }
+  .ci-icon svg{ width:20px; height:20px; }
+  .ci-body{ flex:1; }
+  .ci-name{ font-size:0.9rem; font-weight:600; }
+  .ci-price{ font-size:0.82rem; color:var(--text-faint); margin-top:2px; }
+  .ci-qty-row{ display:flex; align-items:center; gap:10px; margin-top:8px; }
+  .qty-btn{ width:24px; height:24px; border-radius:6px; background:var(--surface-2); border:1px solid var(--line); color:var(--text); font-size:0.9rem; display:flex; align-items:center; justify-content:center; padding:0; }
+  .qty-val{ font-size:0.86rem; min-width:16px; text-align:center; }
+  .ci-remove{ margin-left:auto; background:none; border:none; color:var(--text-faint); font-size:0.78rem; text-decoration:underline; padding:0; }
+  .ci-remove:hover{ color:#e5735c; }
+  .cart-foot{ border-top:1px solid var(--line); padding:18px 22px; padding-bottom: calc(18px + env(safe-area-inset-bottom,0px)); }
+  .cart-total-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .cart-total-row span{ color:var(--text-dim); font-size:0.9rem; }
+  .cart-total-row b{ font-family:'Space Grotesk',sans-serif; font-size:1.4rem; color:var(--accent); }
+  .cart-pay-btn{ width:100%; }
+
+  /* Floating cart bubble (mobile-friendly quick access) */
+  .fab-cart{
+    position:fixed; right:20px; bottom:calc(20px + env(safe-area-inset-bottom,0px)); z-index:70;
+    background:var(--accent); color:#171308; width:58px; height:58px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; border:none;
+    box-shadow:0 8px 22px rgba(0,0,0,0.45);
+  }
+  .fab-cart svg{ width:24px; height:24px; }
+  .fab-count{
+    position:absolute; top:-4px; right:-4px; background:#171308; color:var(--accent);
+    font-size:0.7rem; font-weight:700; min-width:19px; height:19px; border-radius:999px;
+    display:flex; align-items:center; justify-content:center; padding:0 4px; border:2px solid var(--bg-elevated);
+  }
+  .fab-cart.hide-fab{ display:none; }
+
+  /* toast */
+  .toast{
+    position:fixed; left:50%; bottom:calc(30px + env(safe-area-inset-bottom,0px)); transform:translate(-50%, 20px);
+    background:var(--surface-2); border:1px solid var(--line); color:var(--text); padding:12px 20px; border-radius:999px;
+    font-size:0.86rem; z-index:99; opacity:0; pointer-events:none; transition:all .25s ease; display:flex; align-items:center; gap:8px;
+  }
+  .toast.show{ opacity:1; transform:translate(-50%, 0); }
+  .toast svg{ width:16px; height:16px; color:var(--teal); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap headrow">
+    <button class="brand" onclick="goHome()" aria-label="Retour à l'accueil Falcon VPN">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 4C24 4 27 12 34 16C40 19.4 44 20 44 20C44 20 38.5 22.5 33.5 27.5C29 32 27 40 27 40L24 34L21 40C21 40 19 32 14.5 27.5C9.5 22.5 4 20 4 20C4 20 8 19.4 14 16C21 12 24 4 24 4Z" fill="#E7A339"/>
+        <circle cx="24" cy="18" r="2.1" fill="#0F1216"/>
+      </svg>
+      <span class="brand-name">Falcon<span>VPN</span></span>
+    </button>
+
+    <div class="search-shell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="searchInput" type="text" placeholder="Rechercher un produit ou un service…" autocomplete="off" oninput="handleSearch(this.value)" onfocus="handleSearch(this.value)">
+      <div id="searchResults" class="search-results hide"></div>
+    </div>
+
+    <div class="head-actions">
+      <button class="cart-btn" onclick="openCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/><path d="M3 4h2l2.2 11.2a2 2 0 002 1.8h7.6a2 2 0 002-1.7L20 8H6"/></svg>
+        <span>Panier</span>
+        <span id="cartCountHead" class="cart-count hide">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HOME VIEW ============ -->
+<main id="homeView">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5L12 2z"/></svg>
+          Vitesse de faucon, sécurité de forteresse
+        </div>
+        <h1>Internet libre. Boutique en ligne prête à vendre.</h1>
+        <p class="lead">Falcon VPN vous donne une connexion illimitée sans coupure et une boutique en ligne clé en main, pensée pour les entrepreneurs qui n'ont pas de temps à perdre.</p>
+        <div class="hero-cta-row">
+          <a href="#produits" class="btn btn-primary">Voir les offres</a>
+          <a href="https://wa.me/22654845149" target="_blank" rel="noopener" class="btn btn-ghost">Discuter sur WhatsApp</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>3 200+</b><span>utilisateurs connectés</span></div>
+          <div class="hero-stat"><b>98%</b><span>satisfaction client</span></div>
+          <div class="hero-stat"><b>&lt; 5 min</b><span>mise en service</span></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="92" stroke="#2B333D" stroke-width="1.5"/>
+          <circle cx="100" cy="100" r="66" stroke="#2B333D" stroke-width="1.5"/>
+          <path d="M100 20C100 20 112 55 145 70C175 83 190 86 190 86C190 86 162 98 138 122C116 144 108 172 108 172L100 148L92 172C92 172 84 144 62 122C38 98 10 86 10 86C10 86 25 83 55 70C88 55 100 20 100 20Z" fill="#E7A339" fill-opacity="0.14" stroke="#E7A339" stroke-width="2"/>
+          <circle cx="100" cy="76" r="6" fill="#E7A339"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="produits">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Nos deux services phares</h2>
+        <p>Chaque offre est livrée directement par notre équipe, avec un accompagnement personnalisé sur WhatsApp du début à la fin.</p>
+      </div>
+
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </section>
+
+  <section class="section" style="border-bottom:none;">
+    <div class="wrap trust">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>
+        Paiement confirmé directement avec un agent, aucune fraude possible
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+        Activation rapide après confirmation du paiement
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        Support client joignable sur WhatsApp 7j/7
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ PRODUCT DETAIL VIEW ============ -->
+<main id="productView" class="pdview hide">
+  <div class="wrap">
+    <div class="breadcrumb">
+      <button onclick="goHome()">Accueil</button>
+      <span>/</span>
+      <span id="pdBreadName">Produit</span>
+    </div>
+
+    <div class="pd-grid">
+      <div>
+        <div class="pd-visual"><svg id="pdVisualIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"></svg></div>
+      </div>
+
+      <div>
+        <div class="pd-kicker" id="pdKicker">Falcon VPN</div>
+        <h1 class="pd-title" id="pdTitle">—</h1>
+        <div class="pd-rating">
+          <span class="stars" id="pdStars"></span>
+          <span id="pdRatingText">4.9 sur 5</span>
+          <span>·</span>
+          <span id="pdReviewCount">0 avis</span>
+        </div>
+        <div class="pd-price-row">
+          <span class="pd-price" id="pdPrice">0f</span>
+          <span class="pd-price-note" id="pdPriceNote">paiement unique</span>
+        </div>
+        <p class="pd-desc" id="pdDesc"></p>
+
+        <div class="pd-cta-row">
+          <button class="btn btn-add" style="background:var(--surface-2); border:1px solid var(--line); color:var(--text);" onclick="addFromDetail()">Ajouter au panier</button>
+          <button class="btn btn-pay" id="pdPayBtn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 004.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.09c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.79-4.17-4.94-4.36-.14-.2-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.16-.29.36-.42.48-.14.14-.28.28-.12.56.16.28.71 1.17 1.53 1.9 1.05.94 1.93 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.28.37-.23.62-.14.26.09 1.64.77 1.92.91.28.14.47.21.54.33.07.12.07.68-.17 1.36z"/></svg>
+            Payer sur WhatsApp
+          </button>
+        </div>
+
+        <div class="pd-block">
+          <h4>Ce qui est inclus</h4>
+          <ul class="pd-list" id="pdFeatures"></ul>
+        </div>
+
+        <div class="pd-block">
+          <h4>Comment ça marche</h4>
+          <div class="pd-steps" id="pdSteps"></div>
+        </div>
+
+        <div class="pd-block pd-faq" id="pdFaq">
+          <h4>Questions fréquentes</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="pd-block" style="margin-top:56px;">
+      <div class="reviews-head">
+        <div>
+          <h4 style="font-size:1.3rem;">Avis clients</h4>
+        </div>
+        <div class="reviews-summary">
+          <span class="big-score" id="pdBigScore">4.9</span>
+          <div>
+            <span class="stars" id="pdBigStars"></span>
+            <div class="rs-meta" id="pdRsMeta">basé sur 0 avis</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-grid" id="pdReviews"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 4C24 4 27 12 34 16C40 19.4 44 20 44 20C44 20 38.5 22.5 33.5 27.5C29 32 27 40 27 40L24 34L21 40C21 40 19 32 14.5 27.5C9.5 22.5 4 20 4 20C4 20 8 19.4 14 16C21 12 24 4 24 4Z" fill="#E7A339"/>
+      </svg>
+      Falcon VPN — connexion illimitée & boutiques en ligne
+    </div>
+    <div class="foot-links">
+      <a href="https://wa.me/22654845149" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="#produits" onclick="goHome()">Produits</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ FLOATING CART ============ -->
+<button class="fab-cart" id="fabCart" onclick="openCart()" aria-label="Ouvrir le panier">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/><path d="M3 4h2l2.2 11.2a2 2 0 002 1.8h7.6a2 2 0 002-1.7L20 8H6"/></svg>
+  <span class="fab-count hide" id="fabCount">0</span>
+</button>
+
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<aside class="cart-panel" id="cartPanel" aria-label="Panier">
+  <div class="cart-head">
+    <h3>Votre panier</h3>
+    <button class="cart-close" onclick="closeCart()" aria-label="Fermer">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot">
+    <div class="cart-total-row">
+      <span>Total</span>
+      <b id="cartTotal">0f</b>
+    </div>
+    <button class="btn btn-pay cart-pay-btn" id="cartPayBtn">
+      <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 004.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>
+      Payer sur WhatsApp
+    </button>
+  </div>
+</aside>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+  <span id="toastMsg">Ajouté au panier</span>
+</div>
+
+<script>
+/* ===================== DATA ===================== */
+const WHATSAPP_NUMBER = "22654845149";
+
+const ICONS = {
+  shield: `<path d="M12 3l7 3v6c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z"/>`,
+  shop: `<path d="M4 8l1.5-4h13L20 8M4 8h16M4 8v11a1 1 0 001 1h14a1 1 0 001-1V8M9 12v0a3 3 0 006 0v0"/>`
+};
+
+const PRODUCTS = [
+  {
+    id: "connexion-illimitee",
+    name: "Connexion illimitée",
+    kicker: "Accès internet Falcon VPN",
+    tagline: "Une connexion rapide, stable et sans coupure, où que vous soyez.",
+    price: 3000,
+    priceNote: "par mois",
+    icon: "shield",
+    desc: "L'abonnement Connexion illimitée vous donne un accès VPN sans restriction de données, avec une vitesse optimisée pour le streaming, les appels et le télétravail. Fini les coupures et les sites bloqués : vous naviguez librement et en toute confidentialité, sur autant d'appareils que nécessaire.",
+    cardFeatures: ["Données illimitées, aucune coupure", "Compatible téléphone, PC et tablette", "Cryptage de bout en bout"],
+    features: [
+      "Bande passante illimitée, sans plafond de données",
+      "Cryptage de niveau militaire (AES-256)",
+      "Compatible Android, iOS, Windows et Mac",
+      "Serveurs rapides pour streaming et jeux",
+      "Changement d'adresse IP en un clic",
+      "Assistance WhatsApp incluse"
+    ],
+    steps: [
+      { t: "Vous cliquez sur « Payer sur WhatsApp »", d: "Le message se prépare automatiquement avec le produit et le prix." },
+      { t: "Vous confirmez le paiement", d: "Un agent Falcon VPN vous guide pour finaliser le règlement de 3000f." },
+      { t: "Vous recevez vos accès", d: "Vos identifiants de connexion vous sont envoyés directement sur WhatsApp." }
+    ],
+    faq: [
+      { q: "Combien d'appareils puis-je connecter ?", a: "L'abonnement couvre jusqu'à 3 appareils simultanément avec le même compte." },
+      { q: "La connexion fonctionne-t-elle partout ?", a: "Oui, tant que vous avez accès à un réseau Wi-Fi ou aux données mobiles, Falcon VPN fonctionne partout." },
+      { q: "Puis-je renouveler chaque mois ?", a: "Oui, il suffit de nous recontacter sur WhatsApp avant l'expiration pour renouveler sans interruption." }
+    ],
+    reviews: [
+      { name: "Awa Traoré", loc: "Bamako, Mali", rating: 5, text: "Depuis que j'utilise Falcon VPN, plus aucune coupure même en pleine soirée. Le paiement sur WhatsApp est très rapide.", date: "il y a 2 semaines" },
+      { name: "Kwame Mensah", loc: "Accra, Ghana", rating: 5, text: "Rapide à installer et surtout stable. J'ai reçu mes accès 10 minutes après avoir payé.", date: "il y a 1 mois" },
+      { name: "Fatoumata Diarra", loc: "Ouagadougou, Burkina Faso", rating: 4, text: "Bonne vitesse pour le streaming. Le service client répond vite sur WhatsApp, je recommande.", date: "il y a 3 semaines" },
+      { name: "Chinedu Okafor", loc: "Lagos, Nigeria", rating: 5, text: "Je voyage beaucoup pour le travail et Falcon VPN me suit partout sans souci de connexion.", date: "il y a 5 jours" }
+    ]
+  },
+  {
+    id: "boutique-en-ligne",
+    name: "Création de boutique en ligne",
+    kicker: "Falcon Business",
+    tagline: "Votre boutique en ligne prête à vendre, du design à la mise en ligne.",
+    price: 5000,
+    priceNote: "paiement unique",
+    icon: "shop",
+    desc: "Nous créons pour vous une boutique en ligne complète et professionnelle : présentation de vos produits, panier d'achat, et un design adapté à votre activité. Idéal pour les commerçants et entrepreneurs qui veulent vendre en ligne sans compétence technique.",
+    cardFeatures: ["Boutique livrée en 48h maximum", "Design adapté à votre activité", "Accompagnement à la mise en ligne"],
+    features: [
+      "Design personnalisé selon votre secteur",
+      "Fiches produits avec photos et prix",
+      "Panier d'achat et bouton de commande",
+      "Boutique adaptée mobile et ordinateur",
+      "Formation rapide pour gérer vous-même vos produits",
+      "Livraison en 48h après validation du contenu"
+    ],
+    steps: [
+      { t: "Vous cliquez sur « Payer sur WhatsApp »", d: "Vous nous partagez ensuite le nom de votre boutique et vos produits." },
+      { t: "Nous validons le paiement de 5000f", d: "Un agent confirme votre commande et lance la conception de votre boutique." },
+      { t: "Votre boutique est livrée", d: "Sous 48h, vous recevez le lien de votre boutique prête à recevoir des clients." }
+    ],
+    faq: [
+      { q: "Ai-je besoin de compétences techniques ?", a: "Non, nous nous occupons de toute la création. Vous recevez la boutique déjà prête à l'emploi." },
+      { q: "Puis-je modifier mes produits plus tard ?", a: "Oui, une courte formation vous est donnée pour ajouter ou modifier vos produits vous-même." },
+      { q: "Combien de produits puis-je mettre ?", a: "Il n'y a pas de limite fixe, contactez-nous sur WhatsApp pour discuter de votre catalogue." }
+    ],
+    reviews: [
+      { name: "Aminata Cissé", loc: "Abidjan, Côte d'Ivoire", rating: 5, text: "Ma boutique a été livrée en deux jours comme promis. Très professionnel et le design correspond exactement à mon activité.", date: "il y a 1 semaine" },
+      { name: "Sipho Ndlovu", loc: "Johannesburg, Afrique du Sud", rating: 5, text: "Excellent rapport qualité prix pour lancer sa boutique en ligne. L'équipe a été patiente avec mes nombreuses questions.", date: "il y a 3 semaines" },
+      { name: "Fatou Ndiaye", loc: "Dakar, Sénégal", rating: 4, text: "Très satisfaite du résultat final, la boutique est simple à utiliser pour mes clients.", date: "il y a 1 mois" },
+      { name: "Emmanuel Boateng", loc: "Kumasi, Ghana", rating: 5, text: "J'ai pu commencer à vendre en ligne dès la livraison. Le paiement et le suivi sur WhatsApp étaient très clairs.", date: "il y a 4 jours" }
+    ]
+  }
+];
+
+const AVATAR_COLORS = ["#E7A339","#49C6BE","#8C7CF0","#E5735C","#5FB0E8","#6FCF7A"];
+
+/* ===================== STATE ===================== */
+let cart = []; // {id, qty}
+let currentProduct = null;
+
+/* ===================== HELPERS ===================== */
+function formatPrice(n){ return n.toLocaleString('fr-FR').replace(/,/g,' ') + 'f'; }
+function findProduct(id){ return PRODUCTS.find(p => p.id === id); }
+function initials(name){ return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+function avatarColor(name){ let s=0; for(const c of name) s+=c.charCodeAt(0); return AVATAR_COLORS[s % AVATAR_COLORS.length]; }
+
+function starsSVG(rating, size=15){
+  let html='';
+  for(let i=1;i<=5;i++){
+    const filled = i <= Math.round(rating);
+    html += `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="${filled ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.5"><path d="M12 2l2.9 6.4L22 9.3l-5.1 4.8L18.2 22 12 18.3 5.8 22l1.3-7.9L2 9.3l7.1-.9L12 2z"/></svg>`;
+  }
+  return html;
+}
+
+function waLink(text){ return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`; }
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=> t.classList.remove('show'), 2200);
+}
+
+/* ===================== RENDER: HOME PRODUCT CARDS ===================== */
+function renderProductCards(){
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = PRODUCTS.map(p => `
+    <div class="product-card" onclick="openProduct('${p.id}')">
+      <div class="pc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">${ICONS[p.icon]}</svg></div>
+      <h3>${p.name}</h3>
+      <p class="pc-desc">${p.tagline}</p>
+      <ul class="pc-features">
+        ${p.cardFeatures.map(f => `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>${f}</li>`).join('')}
+      </ul>
+      <div class="pc-bottom">
+        <div class="pc-price">${formatPrice(p.price)}<small>${p.priceNote}</small></div>
+        <div class="pc-actions" onclick="event.stopPropagation()">
+          <button class="btn btn-sm btn-add" onclick="addToCart('${p.id}')">Ajouter</button>
+          <button class="btn btn-sm btn-pay" onclick="payDirect('${p.id}')">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 004.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2z"/></svg>
+            Payer
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ===================== NAVIGATION ===================== */
+function goHome(){
+  document.getElementById('homeView').classList.remove('hide');
+  document.getElementById('productView').classList.add('hide');
+  closeSearch();
+  window.scrollTo({top:0, behavior:'smooth'});
+  history.replaceState(null,'','#');
+}
+
+function openProduct(id){
+  const p = findProduct(id);
+  if(!p) return;
+  currentProduct = p;
+  document.getElementById('homeView').classList.add('hide');
+  document.getElementById('productView').classList.remove('hide');
+  closeSearch();
+
+  document.getElementById('pdBreadName').textContent = p.name;
+  document.getElementById('pdKicker').textContent = p.kicker;
+  document.getElementById('pdTitle').textContent = p.name;
+  document.getElementById('pdDesc').textContent = p.desc;
+  document.getElementById('pdPrice').textContent = formatPrice(p.price);
+  document.getElementById('pdPriceNote').textContent = p.priceNote;
+  document.getElementById('pdVisualIcon').innerHTML = ICONS[p.icon];
+
+  const avg = (p.reviews.reduce((s,r)=>s+r.rating,0) / p.reviews.length) || 5;
+  document.getElementById('pdStars').innerHTML = starsSVG(avg);
+  document.getElementById('pdRatingText').textContent = avg.toFixed(1) + ' sur 5';
+  document.getElementById('pdReviewCount').textContent = p.reviews.length + ' avis';
+  document.getElementById('pdBigScore').textContent = avg.toFixed(1);
+  document.getElementById('pdBigStars').innerHTML = starsSVG(avg, 17);
+  document.getElementById('pdRsMeta').textContent = 'basé sur ' + p.reviews.length + ' avis';
+
+  document.getElementById('pdFeatures').innerHTML = p.features.map(f => `
+    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>${f}</li>
+  `).join('');
+
+  document.getElementById('pdSteps').innerHTML = p.steps.map((s,i) => `
+    <div class="pd-step">
+      <div class="pd-step-num">${i+1}</div>
+      <p><b>${s.t}.</b> ${s.d}</p>
+    </div>
+  `).join('');
+
+  const faqBlock = document.getElementById('pdFaq');
+  faqBlock.innerHTML = '<h4>Questions fréquentes</h4>' + p.faq.map(f => `
+    <details>
+      <summary>${f.q}<span class="qicon">+</span></summary>
+      <p>${f.a}</p>
+    </details>
+  `).join('');
+
+  document.getElementById('pdReviews').innerHTML = p.reviews.map(r => `
+    <div class="review-card">
+      <div class="review-top">
+        <div class="avatar" style="background:${avatarColor(r.name)}">${initials(r.name)}</div>
+        <div>
+          <div class="review-name">${r.name}</div>
+          <div class="review-loc">${r.loc}</div>
+        </div>
+      </div>
+      <div class="review-stars stars">${starsSVG(r.rating)}</div>
+      <p class="review-text">${r.text}</p>
+      <div class="review-date">${r.date}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('pdPayBtn').onclick = () => payDirect(p.id);
+
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  history.replaceState(null,'','#'+p.id);
+}
+
+function addFromDetail(){ if(currentProduct) addToCart(currentProduct.id); }
+
+/* ===================== CART LOGIC ===================== */
+function addToCart(id){
+  const existing = cart.find(c => c.id === id);
+  if(existing) existing.qty += 1;
+  else cart.push({id, qty:1});
+  renderCart();
+  const p = findProduct(id);
+  showToast(p.name + ' ajouté au panier');
+}
+
+function changeQty(id, delta){
+  const item = cart.find(c => c.id === id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0) cart = cart.filter(c => c.id !== id);
+  renderCart();
+}
+
+function removeFromCart(id){
+  cart = cart.filter(c => c.id !== id);
+  renderCart();
+}
+
+function cartTotal(){
+  return cart.reduce((sum, c) => {
+    const p = findProduct(c.id);
+    return sum + (p ? p.price * c.qty : 0);
+  }, 0);
+}
+
+function renderCart(){
+  const count = cart.reduce((s,c)=>s+c.qty, 0);
+  const headCount = document.getElementById('cartCountHead');
+  const fabCount = document.getElementById('fabCount');
+  const fab = document.getElementById('fabCart');
+
+  if(count > 0){
+    headCount.textContent = count; headCount.classList.remove('hide');
+    fabCount.textContent = count; fabCount.classList.remove('hide');
+  } else {
+    headCount.classList.add('hide');
+    fabCount.classList.add('hide');
+  }
+
+  const itemsEl = document.getElementById('cartItems');
+  if(cart.length === 0){
+    itemsEl.innerHTML = '<p class="cart-empty">Votre panier est vide pour le moment.</p>';
+  } else {
+    itemsEl.innerHTML = cart.map(c => {
+      const p = findProduct(c.id);
+      return `
+        <div class="cart-item">
+          <div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">${ICONS[p.icon]}</svg></div>
+          <div class="ci-body">
+            <div class="ci-name">${p.name}</div>
+            <div class="ci-price">${formatPrice(p.price)} ${p.priceNote}</div>
+            <div class="ci-qty-row">
+              <button class="qty-btn" onclick="changeQty('${p.id}', -1)">−</button>
+              <span class="qty-val">${c.qty}</span>
+              <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
+              <button class="ci-remove" onclick="removeFromCart('${p.id}')">Retirer</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  document.getElementById('cartTotal').textContent = formatPrice(cartTotal());
+}
+
+function openCart(){
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartPanel').classList.add('open');
+}
+function closeCart(){
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartPanel').classList.remove('open');
+}
+
+/* ===================== WHATSAPP CHECKOUT ===================== */
+function payDirect(id){
+  const p = findProduct(id);
+  const msg = `Bonjour Falcon VPN 👋\nJe souhaite payer :\n• ${p.name} — ${formatPrice(p.price)} (${p.priceNote})\n\nMerci de me confirmer les étapes de paiement.`;
+  window.open(waLink(msg), '_blank');
+}
+
+document.getElementById('cartPayBtn').addEventListener('click', () => {
+  if(cart.length === 0){ showToast('Votre panier est vide'); return; }
+  const lines = cart.map(c => {
+    const p = findProduct(c.id);
+    return `• ${p.name} x${c.qty} — ${formatPrice(p.price * c.qty)}`;
+  }).join('\n');
+  const msg = `Bonjour Falcon VPN 👋\nJe souhaite payer ma commande :\n${lines}\n\nTotal : ${formatPrice(cartTotal())}\n\nMerci de me confirmer les étapes de paiement.`;
+  window.open(waLink(msg), '_blank');
+});
+
+/* ===================== SEARCH ===================== */
+function handleSearch(query){
+  const box = document.getElementById('searchResults');
+  const q = query.trim().toLowerCase();
+  if(q.length === 0){ box.classList.add('hide'); box.innerHTML=''; return; }
+
+  const results = PRODUCTS.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.tagline.toLowerCase().includes(q) ||
+    p.desc.toLowerCase().includes(q)
+  );
+
+  if(results.length === 0){
+    box.innerHTML = '<div class="search-empty">Aucun produit trouvé pour « ' + query + ' »</div>';
+  } else {
+    box.innerHTML = results.map(p => `
+      <button onclick="openProduct('${p.id}')">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--accent); flex-shrink:0;">${ICONS[p.icon]}</svg>
+        ${p.name}
+        <span class="sr-price">${formatPrice(p.price)}</span>
+      </button>
+    `).join('');
+  }
+  box.classList.remove('hide');
+}
+function closeSearch(){
+  document.getElementById('searchResults').classList.add('hide');
+  document.getElementById('searchInput').value = '';
+}
+document.addEventListener('click', (e) => {
+  const shell = document.querySelector('.search-shell');
+  if(shell && !shell.contains(e.target)) document.getElementById('searchResults').classList.add('hide');
+});
+
+/* ===================== INIT ===================== */
+renderProductCards();
+renderCart();
+
+// deep-link to a product via #id on load
+(function initRoute(){
+  const hash = location.hash.replace('#','');
+  if(hash){
+    const p = findProduct(hash);
+    if(p){ openProduct(hash); return; }
+  }
+})();
+</script>
+</body>
+</html>
